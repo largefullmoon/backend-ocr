@@ -1,5 +1,6 @@
 flask
 flask-cors
+flask-socketio
 openai
 python-dotenv
 selenium
