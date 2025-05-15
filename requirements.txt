@@ -1,0 +1,17 @@
+flask
+flask-cors
+openai
+python-dotenv
+selenium
+pyvirtualdisplay
+langchain_community
+langchain
+langchain-openai
+langdetect
+PyPDF2
+langchain_core
+pymongo
+pinecone
+langchain_pinecone
+pdf2image
+Pillow

@@ -1,0 +1,48 @@
+# Python-specific ignores
+__pycache__/
+*.py[cod]
+*$py.class
+upload/
+# Virtual environment
+venv/
+env/
+.env/
+.venv/
+temp_chrome_profile/
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# IDE-specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Environment files (with sensitive information)
+.env
+*.env
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Machine Learning / Data Science specific
+*.pkl
+*.model
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*~
+
+# Specific to your project (you can customize)
+config.ini
+secrets.json
