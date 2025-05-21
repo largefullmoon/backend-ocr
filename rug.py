@@ -23,6 +23,7 @@ import base64
 from io import BytesIO
 import tempfile
 from flask_socketio import SocketIO
+import time
 
 
 # Load environment variables
@@ -262,15 +263,16 @@ def upload_documents():
             # Store document information in MongoDB
             socketio.emit('start_querying')
             print("Querying started")
+            time.sleep(10)
             answer = get_response(file.filename)
-            socketio.emit('upload_completed')
-            print("Upload completed")
             document_info = {
                 'file_name': file.filename,
                 'file_path': file_path,
                 'document_content': document_content, 
                 'answer': answer
             }
+            socketio.emit('upload_completed')
+            print("Upload completed")
             result = documents_collection.insert_one(document_info)
             print(f"Document {file.filename} processed and stored with ID: {result.inserted_id}")
             # Convert ObjectId to string for JSON serialization
@@ -461,4 +463,4 @@ def delete_document(document_id):
 
 # Run the app with SocketIO
 if __name__ == '__main__':
-    socketio.run(app, debug=True, port=8021, host='0.0.0.0')
+    socketio.run(app, debug=True, port=8021, host='0.0.0.0', allow_unsafe_werkzeug=True)
