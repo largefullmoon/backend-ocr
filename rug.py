@@ -290,6 +290,15 @@ def upload_documents():
         print(e)
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/get_response/<document_id>', methods=['GET'])
+def get_response_endpoint(document_id):
+    # Convert string ID to ObjectId
+    doc_id = ObjectId(document_id)
+    # Find the document in MongoDB
+    document = documents_collection.find_one({"_id": doc_id})
+    response = get_response(document['file_name'])
+    return jsonify({"response": response})
+
 def get_response(document_name):
     try:
         vector_store = PineconeVectorStore(
@@ -310,27 +319,10 @@ def get_response(document_name):
         # Modify the custom prompt to include conversation history
         custom_prompt = PromptTemplate(
             template="""
-            You are an AI assistant specialized in extracting real estate transaction information from documents.
-            
-            Your task is to extract and structure the following information from the provided documents:
-            1. Sellers - Names of the selling parties
-            2. Buyers - Names of the buying parties
-            3. Cadastral Reference - Property's cadastral reference number
-            4. Date of Transaction - When the transaction took place
-            5. Type of Transaction - Nature of the real estate transaction
-            6. Protocol - Protocol number or reference
-            7. Volume - Volume number where the transaction is recorded
-            8. Book - Book number where the transaction is recorded
-            9. Page - Page number(s) where the transaction is recorded
-            10. Property - Description or details of the property
-            11. Notary - Name of the notary who processed the transaction
-
-            For each document, provide the information in a structured format. If any field is not found in the document, mark it as "Not specified".
-            
+            You are a helpful assistant. Your task is to extract important information from the provided context.
             Context: {context}
             Current Question: {question}
-            
-            Please provide the extracted information in a clear, structured Markdown format:
+            Please provide the extracted information in a clear, structured Markdown format in Spainish:
             """,
             input_variables=["context", "question"]
         )
@@ -347,20 +339,7 @@ def get_response(document_name):
             }
         )
 
-        query = """
-            Give me detailed information about the real estate transaction from the document.
-            The information should include:
-            1. Sellers
-            2. Buyers
-            3. Cadastral Reference
-            4. Date of Transaction
-            5. Type of Transaction
-            6. Protocol
-            7. Volume
-            8. Book
-            9. Page
-            10. Property
-            11. Notary """
+        query = "Hola necesito que me resumas esta plusvalia con los datos mas importantes para hacer su liquidacion"
         
         result = qa_chain.invoke({
             "query": query,
